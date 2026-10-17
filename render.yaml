@@ -1,0 +1,68 @@
+databases:
+  - name: kenya-me-db
+    databaseName: kenya_me
+    user: kenya_me
+    plan: 0.1c-256mb
+    region: frankfurt
+
+services:
+  - type: web
+    name: kenya-me
+    runtime: docker
+    plan: 0.5c-512mb
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /up
+    preDeployCommand: php artisan migrate --force
+    envVars:
+      - key: APP_NAME
+        value: Kenya.me
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        sync: false
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: kenya-me-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: kenya-me-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: kenya-me-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: kenya-me-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: kenya-me-db
+          property: password
+      - key: SESSION_DRIVER
+        value: database
+      - key: SESSION_SECURE_COOKIE
+        value: "true"
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: DARAJA_ENV
+        value: sandbox
+      - key: DARAJA_SHORTCODE
+        sync: false
+      - key: DARAJA_CONSUMER_KEY
+        sync: false
+      - key: DARAJA_CONSUMER_SECRET
+        sync: false
+      - key: DARAJA_WEBHOOK_TOKEN
+        sync: false
