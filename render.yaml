@@ -14,7 +14,7 @@ services:
     dockerfilePath: ./Dockerfile
     dockerContext: .
     healthCheckPath: /up
-    preDeployCommand: php artisan migrate --force
+  
     envVars:
       - key: APP_NAME
         value: Kenya.me
