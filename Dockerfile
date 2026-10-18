@@ -1,6 +1,6 @@
 FROM dunglas/frankenphp:1-php8.3-alpine
 
-RUN install-php-extensions pdo_pgsql bcmath zip
+RUN install-php-extensions pdo_pgsql bcmath zip gd pcntl exif mbstring
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
@@ -8,7 +8,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader \
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-reqs \
     && mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
 
