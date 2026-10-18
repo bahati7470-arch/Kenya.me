@@ -1,19 +1,21 @@
 <?php
 
-return [
-    'name' => env('APP_NAME', 'Kenya.me'),
-    'env' => env('APP_ENV', 'production'),
-    'debug' => (bool) env('APP_DEBUG', false),
-    'url' => env('APP_URL') ?: env('RENDER_EXTERNAL_URL', 'http://localhost'),
-    'timezone' => env('APP_TIMEZONE', 'Africa/Nairobi'),
-    'locale' => env('APP_LOCALE', 'en'),
-    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
-    'faker_locale' => env('APP_FAKER_LOCALE', 'en_KE'),
-    'cipher' => 'AES-256-CBC',
-    'key' => env('APP_KEY'),
-    'previous_keys' => array_filter(explode(',', env('APP_PREVIOUS_KEYS', ''))),
-    'maintenance' => [
-        'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
-        'store' => env('APP_MAINTENANCE_STORE', 'database'),
-    ],
-];
+use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Configuration\Exceptions;
+use Illuminate\Foundation\Configuration\Middleware;
+use App\Http\Middleware\EnsureUserHasRole;
+
+return Application::configure(basePath: dirname(__DIR__))
+    ->withRouting(
+        web: __DIR__.'/../routes/web.php',
+        commands: __DIR__.'/../routes/console.php',
+        health: '/up',
+    )
+    ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->alias(['role' => EnsureUserHasRole::class]);
+        $middleware->validateCsrfTokens(except: ['webhooks/daraja/c2b/*']);
+        $middleware->trustProxies(at: '*');
+    })
+    ->withExceptions(function (Exceptions $exceptions): void {
+    })
+    ->create();
