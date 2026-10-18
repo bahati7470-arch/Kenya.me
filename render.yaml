@@ -2,14 +2,14 @@ databases:
   - name: kenya-me-db
     databaseName: kenya_me
     user: kenya_me
-    plan: 0.1c-256mb
+    plan: free
     region: frankfurt
 
 services:
   - type: web
     name: kenya-me
     runtime: docker
-    plan: 0.5c-512mb
+    plan: free
     region: frankfurt
     dockerfilePath: ./Dockerfile
     dockerContext: .
