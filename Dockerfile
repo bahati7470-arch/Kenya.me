@@ -6,6 +6,9 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
+# Add a random number here to break the cache: 58324
+COPY . .
+
 COPY . .
 
 # We set COMPOSER_ALLOW_SUPERUSER to prevent warnings, and --no-scripts to prevent Laravel from booting during the build
