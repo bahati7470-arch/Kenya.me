@@ -8,7 +8,10 @@ WORKDIR /app
 
 COPY . .
 
-RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-reqs -vvv \
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-reqs \
+    && mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
+
 COPY Caddyfile /etc/caddy/Caddyfile
 
 EXPOSE 8080
