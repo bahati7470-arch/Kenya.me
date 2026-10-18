@@ -17,4 +17,4 @@ COPY Caddyfile /etc/caddy/Caddyfile
 
 EXPOSE 8080
 
-CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
+CMD php artisan serve --host=0.0.0.0 --port=8080
