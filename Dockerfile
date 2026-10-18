@@ -8,7 +8,8 @@ WORKDIR /app
 
 COPY . .
 
-RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-reqs \
+# We set COMPOSER_ALLOW_SUPERUSER to prevent warnings, and --no-scripts to prevent Laravel from booting during the build
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-reqs --no-scripts \
     && mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
 
